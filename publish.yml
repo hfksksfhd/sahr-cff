@@ -1,0 +1,25 @@
+name: Publish Python Package
+
+on:
+  push:
+    branches:
+      - main  # عند دفع التغييرات إلى فرع main
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+      - name: Install dependencies
+        run: pip install build twine wheel
+      - name: Build package
+        run: python -m build
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@v1.5.1
+        with:
+          user: __token__  # هذا ثابت
+          password: ${{ secrets.PYPI_API_TOKEN }}
